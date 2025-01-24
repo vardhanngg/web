@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaussian Elimination Calculator</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #5d8aa8;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #ff6347;
+            text-align: center;
+        }
+
+        /* Form Styles */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #444;
+        }
+        input[type="number"], input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #5d8aa8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 50%;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #4f7284;
+        }
+
+        /* Result and error message styling */
+        .result-container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            overflow-x: auto;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+            font-weight: bold;
+        }
+        .info {
+            color: #4682b4;
+            font-size: 18px;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Gaussian Elimination for nXn Matrix</h1>
+
+    <div class="container">
+        <form method="POST">
+            <!-- Input for matrix size -->
+            <label for="size">Enter matrix size (n):</label>
+            <input type="number" name="size" id="size" required><br><br>
+
+            <!-- Dynamically generate input fields for the matrix -->
+            <div id="matrix-inputs"></div>
+
+            <button type="submit">Calculate</button>
+        </form>
+    </div>
+
+    {% if matrix_display %}
+        <div class="result-container">
+            <h3>Gaussian Elimination Result:</h3>
+            <pre>{{ matrix_display }}</pre>  <!-- This will format the matrix properly -->
+        </div>
+    {% endif %}
+
+    {% if determinant is not none %}
+        <div class="result-container">
+            <h3>Determinant: {{ determinant }}</h3>
+        </div>
+    {% endif %}
+
+    {% if matrix_rank is not none %}
+        <div class="result-container">
+            <h3>Rank: {{ matrix_rank }}</h3>
+        </div>
+    {% endif %}
+
+    {% if error_message %}
+        <div class="error-message">
+            <h3>Error: {{ error_message }}</h3>
+        </div>
+    {% endif %}
+
+    <script>
+        // Dynamically generate the input fields for the matrix based on the size
+        document.getElementById('size').addEventListener('input', function() {
+            let n = parseInt(this.value);
+            let container = document.getElementById('matrix-inputs');
+            container.innerHTML = ''; // Clear previous inputs
+
+            if (n > 0) {
+                for (let i = 1; i <= n; i++) {
+                    let rowInput = document.createElement('input');
+                    rowInput.type = 'text';
+                    rowInput.name = `row${i}`;
+                    rowInput.placeholder = `Enter row ${i} (space-separated)`;
+                    container.appendChild(rowInput);
+                    container.appendChild(document.createElement('br'));
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
